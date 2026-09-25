@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 
+import CallToAction from '../../components/CallToAction.astro';
 import ContactCTA from '../../components/ContactCTA.astro';
 import Hero from '../../components/Hero.astro';
 import Icon from '../../components/Icon.astro';
@@ -24,27 +26,56 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const { data } = entry;
+
+/** Rows for the "game info" panel. */
+const stats = [
+	{ label: 'Jam', value: data.jam, href: data.jamUrl },
+	{ label: 'Theme', value: data.theme },
+	{ label: 'My role', value: data.role },
+	{ label: 'Party size', value: data.teamSize === 1 ? 'Solo' : `${data.teamSize} people` },
+	{ label: 'Engine', value: data.engine },
+	{ label: 'Platforms', value: data.platforms.join(', ') },
+].filter((stat) => stat.value);
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description}>
+<BaseLayout title={data.title} description={data.description}>
 	<div class="stack gap-20">
 		<div class="stack gap-15">
 			<header>
 				<div class="wrapper stack gap-2">
-					<a class="back-link" href="/work/"><Icon icon="arrow-left" /> Work</a>
-					<Hero title={entry.data.title} align="start">
+					<a class="back-link" href="/work/"><Icon icon="arrow-left" /> Level Select</a>
+					<Hero title={data.title} align="start">
 						<div class="details">
 							<div class="tags">
-								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
+								{data.tags.map((t) => <Pill>{t}</Pill>)}
 							</div>
-							<p class="description">{entry.data.description}</p>
+							<p class="description">{data.description}</p>
 						</div>
 					</Hero>
 				</div>
 			</header>
 			<main class="wrapper">
 				<div class="stack gap-10 content">
-					{entry.data.img && <img src={entry.data.img} alt={entry.data.img_alt || ''} />}
+					<Image src={data.img} alt={data.img_alt || ''} width={1300} class="cover" />
+
+					<aside class="game-info" aria-label="Game info">
+						<dl>
+							{
+								stats.map(({ label, value, href }) => (
+									<div>
+										<dt>{label}</dt>
+										<dd>{href ? <a href={href}>{value}</a> : value}</dd>
+									</div>
+								))
+							}
+						</dl>
+						<CallToAction href={data.itchUrl}>
+							{data.playInBrowser ? 'Play in Browser' : 'Download on itch.io'}
+							<Icon icon="game-controller" size="1.2em" />
+						</CallToAction>
+					</aside>
+
 					<div class="content">
 						<Content />
 					</div>
@@ -101,11 +132,75 @@ const { Content } = await render(entry);
 		margin: 1.5rem 0;
 	}
 
+	.cover {
+		border-radius: 1.5rem;
+		box-shadow: var(--shadow-md);
+	}
+
+	.game-info {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding: 1.5rem;
+		border: 1px solid var(--gray-800);
+		border-radius: 1.5rem;
+		background: var(--gradient-subtle);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.game-info dl {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+		gap: 1rem 1.5rem;
+		margin: 0;
+	}
+
+	.game-info dt {
+		font-family: var(--font-brand);
+		font-size: var(--text-sm);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+	}
+
+	.game-info dd {
+		margin: 0;
+		color: var(--gray-0);
+	}
+
+	.game-info :global(a) {
+		align-self: center;
+	}
+
 	.content :global(img) {
 		border-radius: 1.5rem;
 		box-shadow: var(--shadow-sm);
 		background: var(--gradient-subtle);
 		border: 1px solid var(--gray-800);
+	}
+
+	.content :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	.content :global(th),
+	.content :global(td) {
+		padding: 0.5rem 0.75rem;
+		text-align: start;
+		border-bottom: 1px solid var(--gray-800);
+	}
+
+	.content :global(th) {
+		font-family: var(--font-brand);
+		color: var(--gray-0);
+	}
+
+	.content :global(code) {
+		padding: 0.1em 0.4em;
+		border-radius: 0.375rem;
+		background: var(--gray-800);
+		font-size: 0.9em;
 	}
 
 	.content :global(blockquote) {
@@ -143,7 +238,31 @@ const { Content } = await render(entry);
 			gap: 2.5rem;
 		}
 
-		.content :global(blockquote) {
+		.content :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	.content :global(th),
+	.content :global(td) {
+		padding: 0.5rem 0.75rem;
+		text-align: start;
+		border-bottom: 1px solid var(--gray-800);
+	}
+
+	.content :global(th) {
+		font-family: var(--font-brand);
+		color: var(--gray-0);
+	}
+
+	.content :global(code) {
+		padding: 0.1em 0.4em;
+		border-radius: 0.375rem;
+		background: var(--gray-800);
+		font-size: 0.9em;
+	}
+
+	.content :global(blockquote) {
 			font-size: var(--text-2xl);
 		}
 	}

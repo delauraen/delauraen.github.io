@@ -4,19 +4,31 @@ import Icon from './Icon.astro';
 
 <section class="box skills">
 	<div class="stack gap-2 lg:gap-4">
-		<Icon icon="terminal-window" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Full Stack</h2>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
+		<Icon icon="map-trifold" color="var(--accent-regular)" size="2.5rem" gradient />
+		<p class="ability">Ability 01</p>
+		<h2>Level &amp; Systems Design</h2>
+		<p>
+			Mall layouts sketched for skate lines, character-swap puzzles, and resource loops where fuel is
+			both the timer and the win condition.
+		</p>
 	</div>
 	<div class="stack gap-2 lg:gap-4">
-		<Icon icon="trophy" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Industry Leader</h2>
-		<p>Neque viverra justo nec ultrices dui. Est ultricies integer quis auctor elit.</p>
+		<Icon icon="bug-beetle" color="var(--accent-regular)" size="2.5rem" gradient />
+		<p class="ability">Ability 02</p>
+		<h2>QA Vision</h2>
+		<p>
+			As a Staff Test Analyst at Blizzard, I break games for a living. I design with edge cases,
+			readability, and the player's first five minutes in mind.
+		</p>
 	</div>
 	<div class="stack gap-2 lg:gap-4">
-		<Icon icon="strategy" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Strategy-Minded</h2>
-		<p>Urna porttitor rhoncus dolor purus non enim praesent ornare.</p>
+		<Icon icon="hourglass-high" color="var(--accent-regular)" size="2.5rem" gradient />
+		<p class="ability">Ability 03</p>
+		<h2>Ships on a Deadline</h2>
+		<p>
+			Seven game jams, solo and with teams of up to nine: scoping, producing, and delivering playable
+			games in days.
+		</p>
 	</div>
 </section>
 
@@ -41,6 +53,15 @@ import Icon from './Icon.astro';
 
 	.skills p {
 		color: var(--gray-400);
+	}
+
+	.skills .ability {
+		font-family: var(--font-brand);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--link-color);
 	}
 
 	@media (min-width: 50em) {

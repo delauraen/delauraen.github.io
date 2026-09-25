@@ -1,11 +1,12 @@
 ---
+import { site } from '../site';
 import CallToAction from './CallToAction.astro';
 import Icon from './Icon.astro';
 ---
 
 <aside>
-	<h2>Interested in working together?</h2>
-	<CallToAction href="mailto:me@example.com">
+	<h2>Ready for co-op? Let’s team up.</h2>
+	<CallToAction href={`mailto:${site.email}`}>
 		Send Me a Message
 		<Icon icon="paper-plane-tilt" size="1.2em" />
 	</CallToAction>

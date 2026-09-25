@@ -2,56 +2,62 @@
 import ContactCTA from '../components/ContactCTA.astro';
 import Hero from '../components/Hero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { jamLog, site } from '../site';
 ---
 
-<BaseLayout title="About | Jeanine White" description="About Jeanine White Lorem Ipsum">
+<BaseLayout
+	title={`About | ${site.name}`}
+	description={`About ${site.name}: Staff Test Analyst at Blizzard Entertainment, moving into game design.`}
+>
 	<div class="stack gap-20">
 		<main class="wrapper about">
-			<Hero
-				title="About"
-				tagline="Thanks for stopping by. Read below to learn more about myself and my background."
-			>
-				<img
-					width="1553"
-					height="873"
-					src="/assets/at-work.jpg"
-					alt="Jeanine White at work with a colleague"
-				/>
-			</Hero>
+			<Hero title="About" tagline="QA professional by day, game designer by night." />
 
 			<section>
 				<h2 class="section-title">Background</h2>
 				<div class="content">
 					<p>
-						Lorem ipsum dolor sit amet, <a href="https://astro.build/">Astro</a> makes people happy. Sed
-						do eiusmod tempor incididunt ut labore et dolore magna aliqua. Proin nibh nisl condimentum
-						id venenatis a condimentum vitae. Dapibus ultrices in iaculis nunc. Arcu odio ut sem nulla
-						pharetra diam sit amet. Diam quis enim lobortis scelerisque fermentum dui faucibus in ornare.
+						I'm a Staff Test Analyst at Blizzard Entertainment. My job is finding the ways a game can
+						break, which also means learning why it's fun when it doesn't.
 					</p>
 					<p>
-						Arcu dui vivamus arcu felis bibendum ut tristique et egestas. Eget gravida cum sociis
-						natoque penatibus. Cras fermentum odio eu feugiat pretium nibh. Proin nibh nisl
-						condimentum id venenatis. Porta nibh venenatis cras sed felis eget velit. Id diam vel
-						quam elementum pulvinar etiam non.
+						Since 2023 I've entered {jamLog.length} game jams, starting with a solo Ludum Dare entry
+						where I taught myself Unreal Engine 5, Blender and Aseprite from scratch. Since then I've
+						led design on team projects, including level design for a nine-person team and designing,
+						coding and producing a character-swap puzzle platformer.
 					</p>
 					<p>
-						Ultrices tincidunt arcu non sodales neque sodales ut. Sed enim ut sem viverra aliquet
-						eget sit amet. Lacus luctus accumsan tortor posuere ac ut consequat semper viverra.
-						Viverra accumsan in nisl nisi scelerisque eu ultrices. In massa tempor nec feugiat nisl
-						pretium fusce.
+						I keep leveling up my design skills through game jams and portfolio projects. You can play my games on <a href={site.itch}
+							>itch.io</a
+						>.
 					</p>
 				</div>
 			</section>
 			<section>
-				<h2 class="section-title">Education</h2>
+				<h2 class="section-title">Loadout</h2>
 				<div class="content">
-					<p>Corporis voluptates tenetur laudantium.</p>
+					<ul class="loadout">
+						<li><strong>Engines:</strong> Godot, Unreal Engine 5 (Blueprints)</li>
+						<li><strong>Art:</strong> Blender, Aseprite</li>
+						<li>
+							<strong>Design:</strong> level layout, core loops, tuning values, scoping
+							for deadlines
+						</li>
+						<li>
+							<strong>QA:</strong> test planning, bug triage, edge-case hunting, player-first
+							readability
+						</li>
+					</ul>
 				</div>
 			</section>
 			<section>
-				<h2 class="section-title">Skills</h2>
+				<h2 class="section-title">Say Hi</h2>
 				<div class="content">
-					<p>officia unde omnis</p>
+					<p>
+						I'm open to game design roles and jam collaborations. Email me at <a
+							href={`mailto:${site.email}`}>{site.email}</a
+						> or find me on <a href={site.linkedin}>LinkedIn</a>.
+					</p>
 				</div>
 			</section>
 		</main>
@@ -67,10 +73,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		gap: 3.5rem;
 	}
 
-	img {
-		margin-top: 1.5rem;
-		border-radius: 1.5rem;
-		box-shadow: var(--shadow-md);
+	.loadout {
+		display: grid;
+		gap: 0.5rem;
+		padding-inline-start: 1.25rem;
 	}
 
 	section {
@@ -88,6 +94,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 	.content {
 		grid-column: 2 / 4;
+	}
+
+	.content > :global(* + *) {
+		margin-top: 1rem;
 	}
 
 	.content :global(a) {

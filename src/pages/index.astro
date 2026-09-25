@@ -8,15 +8,19 @@ import Grid from '../components/Grid.astro';
 import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
 import Pill from '../components/Pill.astro';
+import PlayerCard from '../components/PlayerCard.astro';
 import PortfolioPreview from '../components/PortfolioPreview.astro';
 import Skills from '../components/Skills.astro';
+import { jamLog, site } from '../site';
 // Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Content Fetching: List four most recent work projects
+// Content Fetching: List the four most recent jam case studies
 const projects = (await getCollection('work'))
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 	.slice(0, 4);
+
+const firstName = site.name.split(' ')[0];
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -26,24 +30,15 @@ const projects = (await getCollection('work'))
 	<div class="stack gap-20 lg:gap-48">
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">
-				<Hero
-					title="Hello, my name is Jeanine White"
-					tagline="I am a Creative Developer who is currently based in Portland, Oregon."
-					align="start"
-				>
+				<Hero title={`Hi, I'm ${firstName}. I make games.`} tagline={site.tagline} align="start">
 					<div class="roles">
-						<Pill><Icon icon="code" size="1.33em" /> Developer</Pill>
-						<Pill><Icon icon="microphone-stage" size="1.33em" /> Speaker</Pill>
-						<Pill><Icon icon="pencil-line" size="1.33em" /> Writer</Pill>
+						<Pill><Icon icon="game-controller" size="1.33em" /> Game Design</Pill>
+						<Pill><Icon icon="map-trifold" size="1.33em" /> Level Design</Pill>
+						<Pill><Icon icon="bug-beetle" size="1.33em" /> QA</Pill>
 					</div>
 				</Hero>
 
-				<img
-					alt="Jeanine White smiling in a red plaid shirt and tortoise shell glasses"
-					width="480"
-					height="620"
-					src="/assets/portrait.jpg"
-				/>
+				<PlayerCard />
 			</header>
 
 			<Skills />
@@ -52,8 +47,11 @@ const projects = (await getCollection('work'))
 		<main class="wrapper stack gap-20 lg:gap-48">
 			<section class="section with-background with-cta">
 				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Selected Work</h3>
-					<p>Take a look below at some of my featured work for clients from the past few years.</p>
+					<h3>Selected Games</h3>
+					<p>
+						Game jam projects where I led design. Each one has a breakdown of the design decisions
+						behind it.
+					</p>
 				</header>
 
 				<div class="gallery">
@@ -70,7 +68,7 @@ const projects = (await getCollection('work'))
 
 				<div class="cta">
 					<CallToAction href="/work/">
-						View All
+						All Games
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
 				</div>
@@ -78,19 +76,26 @@ const projects = (await getCollection('work'))
 
 			<section class="section with-background bg-variant">
 				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Mentions</h3>
+					<h3>Jam Log</h3>
 					<p>
-						I have been fortunate enough to receive praise for my work in several publications. Take
-						a look below to learn more.
+						Every jam I've entered, from my first solo Ludum Dare to leading design on a nine-person
+						team.
 					</p>
 				</header>
 
 				<div class="gallery">
 					<Grid variant="small">
 						{
-							['Medium', 'BuzzFeed', 'The Next Web', 'awwwards.', 'TechCrunch'].map((brand) => (
-								<li class="mention-card">
-									<p>{brand}</p>
+							jamLog.map(({ game, jam, theme, when, url, slug }) => (
+								<li>
+									<a class="jam-card" href={slug ? `/work/${slug}/` : url}>
+										<Icon icon="trophy" color="var(--accent-regular)" size="1.75rem" gradient />
+										<span class="jam-game">{game}</span>
+										<span class="jam-meta">
+											{jam} · {when}
+										</span>
+										{theme && <span class="jam-theme">Theme: {theme}</span>}
+									</a>
 								</li>
 							))
 						}
@@ -115,14 +120,6 @@ const projects = (await getCollection('work'))
 		display: none;
 	}
 
-	.hero img {
-		aspect-ratio: 5 / 4;
-		object-fit: cover;
-		object-position: top;
-		border-radius: 1.5rem;
-		box-shadow: var(--shadow-md);
-	}
-
 	@media (min-width: 50em) {
 		.hero {
 			display: grid;
@@ -131,16 +128,14 @@ const projects = (await getCollection('work'))
 			gap: 3.75rem;
 		}
 
+		.hero > :global(.player-card) {
+			justify-self: end;
+		}
+
 		.roles {
 			margin-top: 0.5rem;
 			display: flex;
 			gap: 0.5rem;
-		}
-
-		.hero img {
-			aspect-ratio: 3 / 4;
-			border-radius: 4.5rem;
-			object-fit: cover;
 		}
 	}
 
@@ -227,23 +222,47 @@ const projects = (await getCollection('work'))
 
 	/* ====================================================== */
 
-	.mention-card {
+	.jam-card {
 		display: flex;
-		height: 7rem;
-		justify-content: center;
+		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		gap: 0.375rem;
+		height: 100%;
+		min-height: 9.5rem;
+		padding: 1.25rem;
 		text-align: center;
+		text-decoration: none;
 		border: 1px solid var(--gray-800);
 		border-radius: 1.5rem;
 		color: var(--gray-300);
 		background: var(--gradient-subtle);
 		box-shadow: var(--shadow-sm);
+		transition:
+			box-shadow var(--theme-transition),
+			border-color var(--theme-transition);
 	}
 
-	@media (min-width: 50em) {
-		.mention-card {
-			border-radius: 1.5rem;
-			height: 9.5rem;
-		}
+	.jam-card:hover,
+	.jam-card:focus-visible {
+		border-color: var(--accent-regular);
+		box-shadow: var(--shadow-md);
+	}
+
+	.jam-game {
+		font-family: var(--font-brand);
+		font-size: var(--text-lg);
+		font-weight: 600;
+		color: var(--gray-0);
+	}
+
+	.jam-meta,
+	.jam-theme {
+		font-size: var(--text-sm);
+	}
+
+	.jam-theme {
+		font-style: italic;
+		color: var(--link-color);
 	}
 </style>

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { site } from '../site';
 
 interface Props {
 	title?: string | undefined;
@@ -7,8 +8,8 @@ interface Props {
 }
 
 const {
-	title = 'Jeanine White: Personal Site',
-	description = 'The personal site of Jeanine White',
+	title = `${site.name} | ${site.role}`,
+	description = `Game design portfolio of ${site.name}. Game jam projects, level design and design breakdowns.`,
 } = Astro.props;
 ---
 

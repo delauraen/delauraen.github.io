@@ -5,6 +5,7 @@ import Grid from '../components/Grid.astro';
 import Hero from '../components/Hero.astro';
 import PortfolioPreview from '../components/PortfolioPreview.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../site';
 
 const projects = (await getCollection('work')).sort(
 	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
@@ -12,14 +13,14 @@ const projects = (await getCollection('work')).sort(
 ---
 
 <BaseLayout
-	title="My Work | Jeanine White"
-	description="Learn about Jeanine White's most recent projects"
+	title={`Games | ${site.name}`}
+	description={`Game jam projects and design breakdowns by ${site.name}.`}
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-8">
 			<Hero
-				title="My Work"
-				tagline="See my most recent projects below to get an idea of my past experience."
+				title="Level Select"
+				tagline="Pick a game to see the design breakdown: the pitch, the core mechanics, and my role on the team."
 				align="start"
 			/>
 			<Grid variant="offset">
